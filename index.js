@@ -28,10 +28,10 @@ function renderOneFilm(films){
     filmTick.textContent=`Available Tickets:${available_tickets}`
 
     buyTick.addEventListener('click', ()=>{
-        if(available_tickets>=0){
-            filmTick.textContent= `Available Tickets: ${available_tickets--}`
+        if(available_tickets>0){
+            filmTick.textContent=`Available Tickets: ${--available_tickets}`
         }
-        else if(available_tickets<0){
+        else if(available_tickets<=0){
             buyTick.innerText="Tickets Sold Out"
             buyTick.style.backgroundColor= 'red';
         }
@@ -46,10 +46,6 @@ function displayFilm(){
 }
 
 
-
-
-
-
 function getAllFilms(){
     fetch('https://abdub2.github.io/db.json')
     .then(res => res.json())
@@ -61,11 +57,10 @@ function initialize(){
 }
 initialize()
 
+displayFilm()
 
 
-function decrement() {
-     document.getElementById('demoInput').stepDown();
-    }
+
 
 
 
