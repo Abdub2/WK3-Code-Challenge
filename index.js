@@ -1,38 +1,59 @@
-function renderOneFilm(film){
+const filmNames=document.getElementById('films')
+
+function renderOneFilm(films){
     let card= document.createElement('li')
-    let capacity=`${film.capacity}`
-    let sold= `${film.tickets_sold}`
-    const available_tickets=capacity-sold
-    card.className='card'
+    card.className='films-details'
+    card.textContent= films.title
+    filmNames.append(card)
 
-    card.innerHTML=
-    `
+    card.addEventListener('click', ()=>{
+        createFilmContent(films)
 
-    <img id="img" src="${film.poster}">
-    <div class ="content">
-        <h2>${film.title}</h2>
-        Runtime: <h4>${film.runtime} minutes</h4>
-        Showtime:<h4>${film.showtime}</h4>
-        Number of available tickets:<output type=numner id= demoInput min=0 ></output>
-    </div>
-    <div>
-    <button onclick="decrement()">Buy Ticket</button>
-    </div>
+    })
+}
+    function createFilmContent(films){
+    const filmTitle=document.getElementById('film-title')
+    const filmImg=document.getElementById('film-img')
+    const runtime=document.getElementById('film-run')
+    const showtime=document.getElementById('film-show')
+    const filmTick=document.getElementById('film-tick')
+    const buyTick=document.getElementById('buy-tick')
+    let capacity=films.capacity
+    let sold=films.tickets_sold
+    let available_tickets=capacity-sold
+    filmTitle.textContent=films.title
+    filmImg.src=films.poster
+    runtime.textContent=`Runtime: ${films.runtime} minutes`
+    showtime.textContent=`Showtime: ${films.showtime}`
+    filmTick.textContent=`Available Tickets:${available_tickets}`
 
+    buyTick.addEventListener('click', ()=>{
+        if(available_tickets>=0){
+            filmTick.textContent= `Available Tickets: ${available_tickets--}`
+        }
+        else if(available_tickets<0){
+            buyTick.innerText="Tickets Sold Out"
+            buyTick.style.backgroundColor= 'red';
+        }
 
+    })
+}
 
-    `
-    document.querySelector('#films').appendChild(card)
+function displayFilm(){
+    fetch('https://abdub2.github.io/db.json')
+    .then(res => res.json())
+    .then((data => createFilmContent(data.films[0])))
 }
 
 
 
 
 
+
 function getAllFilms(){
-    fetch('http://localhost:3000/films/')
+    fetch('https://abdub2.github.io/db.json')
     .then(res => res.json())
-    .then(films => films.forEach(film =>renderOneFilm(film)))
+    .then((data => data.films.forEach(films =>renderOneFilm(films))));
 }
 
 function initialize(){
